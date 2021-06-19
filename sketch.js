@@ -1,5 +1,5 @@
 const directions = Object.freeze({ "left": 1, "right": 2, "up": 3, "down": 4 })
-const snakeBody = [[1, 1], [1, 2], [1, 3]]
+let snakeBody = []
 const gridSize = 10
 
 const maxWidth = 80
@@ -11,8 +11,11 @@ let snakeDirection = directions.right
 let lastMovementDirection = directions.right
 
 function setup() {
+  for (let i = 0; i < 10; i++) {
+    snakeBody.unshift([i, 1]);
+  }
   createCanvas(maxWidth * gridSize, maxHeight * gridSize);
-  frameRate(20); // Attempt to refresh at starting FPS
+  frameRate(15); // Attempt to refresh at starting FPS
 }
 
 function draw() {
@@ -20,7 +23,7 @@ function draw() {
   if (playing) {
     moveSnake()
     drawSnake()
-    if (checkCollision()) {
+    if (hasCollidedWithWall() || hasCollidedWithBody()) {
       playing = false
       alert("game over")
     }
@@ -85,15 +88,23 @@ function drawSnake() {
   }
 }
 
-function checkCollision() {
+function hasCollidedWithWall() {
   snakeHead = snakeBody[0]
-  headWidth = snakeHead[0]
-  headHeight = snakeHead[1]
-  if (headWidth >= maxWidth || headWidth <= 0) {
+  headX = snakeHead[0]
+  headY = snakeHead[1]
+  if (headX >= maxWidth || headX <= 0) {
     return true
-  } else if (headHeight >= maxHeight || headHeight <= 0) {
+  } else if (headY >= maxHeight || headY <= 0) {
     return true
   }
 
   return false
+}
+
+function hasCollidedWithBody() {
+  snakeHead = snakeBody[0]
+
+  partsOnHead = snakeBody.filter(bodyPart => bodyPart[0] == snakeHead[0] && bodyPart[1] == snakeHead[1]).length
+
+  return partsOnHead > 1
 }
