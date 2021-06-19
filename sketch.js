@@ -1,16 +1,17 @@
 const directions = Object.freeze({ "left": 1, "right": 2, "up": 3, "down": 4 })
-let snakeBody = []
 const gridSize = 10
-
 const maxWidth = 80
 const maxHeight = 50
 
-let playing = true
-let snakeDirection = directions.right
-
-let lastMovementDirection = directions.right
+let snakeBody;
+let playing;
+let snakeDirection;
+let lastMovementDirection;
 
 function setup() {
+  snakeBody = []
+  playing = true
+  lastMovementDirection = snakeDirection = directions.right;
   for (let i = 0; i < 10; i++) {
     snakeBody.unshift([i, 1]);
   }
@@ -19,14 +20,13 @@ function setup() {
 }
 
 function draw() {
-  drawScenario()
-  drawStats()
   if (playing) {
+    drawScenario()
+    drawStats()
     moveSnake()
     drawSnake()
     if (hasCollidedWithWall() || hasCollidedWithBody()) {
-      playing = false
-      alert("game over")
+      gameOver()
     }
   }
 }
@@ -136,4 +136,15 @@ function drawStats() {
   textAlign(CENTER);
   text('length: 123:456', gridSize * maxWidth * 0.5, (3 + maxHeight) * gridSize);
 
+}
+
+function gameOver() {
+  playing = false
+  textSize(50);
+  fill(255, 0, 0)
+  textAlign(CENTER);
+  text('GAME OVER!', gridSize * maxWidth * 0.5, maxHeight * gridSize * 0.5);
+  if (window.confirm("game over! restart?")) {
+    setup()
+  }
 }
