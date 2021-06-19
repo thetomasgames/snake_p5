@@ -9,6 +9,7 @@ let snakeDirection;
 let lastMovementDirection;
 let startTimestamp;
 let speed;
+let applePosition;
 
 function setup() {
   startTimestamp = new Date()
@@ -16,6 +17,7 @@ function setup() {
   playing = true
   lastMovementDirection = snakeDirection = directions.right;
   speed = 15;
+  randomizeApplePosition()
   for (let i = 0; i < 10; i++) {
     snakeBody.unshift([i, 1]);
   }
@@ -29,8 +31,12 @@ function draw() {
     drawStats()
     moveSnake()
     drawSnake()
+    drawApple()
     if (hasCollidedWithWall() || hasCollidedWithBody()) {
       gameOver()
+    } else if (hasCaughtApple()) {
+      growSnake()
+      randomizeApplePosition()
     }
   }
 }
@@ -108,9 +114,7 @@ function hasCollidedWithWall() {
 }
 
 function hasCollidedWithBody() {
-  snakeHead = snakeBody[0]
-
-  partsOnHead = snakeBody.filter(bodyPart => bodyPart[0] == snakeHead[0] && bodyPart[1] == snakeHead[1]).length
+  partsOnHead = snakeBody.filter(bodyPart => isSnakeHeadTouching(bodyPart)).length
 
   return partsOnHead > 1
 }
@@ -165,4 +169,42 @@ function gameOver() {
   if (window.confirm("game over! restart?")) {
     setup()
   }
+}
+
+function isSnakeHeadTouching(position) {
+  snakeHead = snakeBody[0]
+  return snakeHead[0] == position[0] && snakeHead[1] == position[1]
+}
+
+function hasCaughtApple() {
+  return isSnakeHeadTouching(applePosition)
+}
+
+function growSnake() {
+  snakeTail = snakeBody[snakeBody.length - 1]
+  snakeBody.push(snakeTail)
+}
+
+function randomPosition(maxX, maxY) {
+  randX = Math.floor(Math.random() * maxX)
+  randY = Math.floor(Math.random() * maxY)
+
+  return [randX, randY]
+}
+
+function randomizeApplePosition() {
+  tries = 0
+  maxTries = 10000;
+  while (tries < maxTries) {
+    applePosition = randomPosition(maxWidth, maxHeight)
+    if (snakeBody.filter(bodyPart => bodyPart[0] == applePosition[1] && bodyPart[1] == applePosition[1]).length == 0) {
+      break;
+    }
+  }
+}
+
+function drawApple() {
+  fill(163, 32, 58)
+  stroke(163, 32, 58)
+  circle((applePosition[0] + 0.5) * gridSize, (applePosition[1] + 0.5) * gridSize, gridSize, gridSize)
 }
