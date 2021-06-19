@@ -31,6 +31,7 @@ function setup() {
 function draw() {
   frameRate(speed);
   if (playing) {
+    drawWatermark()
     drawScenario()
     drawStats()
     moveSnake()
@@ -127,7 +128,6 @@ function hasCollidedWithBody() {
 }
 
 function drawScenario() {
-  background(0);
   fill(156, 156, 156)
   stroke(0)
 
@@ -241,4 +241,13 @@ function oppositeDirection(direction) {
     case directions.down:
       return directions.up;
   }
+}
+
+function drawWatermark() {
+  background(0);
+  textSize(100)
+  noStroke()
+  fill(156 / 20, 256 / 20, 156 / 20)
+  textAlign(CENTER);
+  text('the tomas games', gridSize, (maxHeight - 5) * gridSize * 0.5, maxWidth * gridSize, maxHeight * gridSize);
 }
