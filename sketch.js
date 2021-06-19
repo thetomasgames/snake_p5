@@ -8,6 +8,8 @@ const maxHeight = 50
 let playing = true
 let snakeDirection = directions.right
 
+let lastMovementDirection = directions.right
+
 function setup() {
   createCanvas(maxWidth * gridSize, maxHeight * gridSize);
   frameRate(20); // Attempt to refresh at starting FPS
@@ -47,22 +49,32 @@ function moveSnake() {
   snakeHead = snakeBody[0]
   snakeTail = [snakeHead[0] + deltaX, snakeHead[1] + deltaY]
   newHead = snakeBody.unshift(snakeTail)
+
+  lastMovementDirection = snakeDirection
 }
 
 
 function keyPressed() {
   switch (keyCode) {
     case LEFT_ARROW:
-      snakeDirection = directions.left
+      if (lastMovementDirection != directions.right) {
+        snakeDirection = directions.left
+      }
       break
     case RIGHT_ARROW:
-      snakeDirection = directions.right
+      if (lastMovementDirection != directions.left) {
+        snakeDirection = directions.right
+      }
       break
     case UP_ARROW:
-      snakeDirection = directions.up
+      if (lastMovementDirection != directions.down) {
+        snakeDirection = directions.up
+      }
       break
     case DOWN_ARROW:
-      snakeDirection = directions.down
+      if (lastMovementDirection != directions.up) {
+        snakeDirection = directions.down
+      }
       break
   }
 }
