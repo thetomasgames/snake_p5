@@ -7,19 +7,23 @@ let snakeBody;
 let playing;
 let snakeDirection;
 let lastMovementDirection;
+let startTimestamp;
+let speed;
 
 function setup() {
+  startTimestamp = new Date()
   snakeBody = []
   playing = true
   lastMovementDirection = snakeDirection = directions.right;
+  speed = 15;
   for (let i = 0; i < 10; i++) {
     snakeBody.unshift([i, 1]);
   }
   createCanvas((1 + maxWidth) * gridSize, (4 + maxHeight) * gridSize);
-  frameRate(15); // Attempt to refresh at starting FPS
 }
 
 function draw() {
+  frameRate(speed);
   if (playing) {
     drawScenario()
     drawStats()
@@ -126,15 +130,29 @@ function drawScenario() {
   }
 }
 
+function getTimeElapsed() {
+  now = new Date()
+  deltaTimeSeconds = (now.getTime() - startTimestamp.getTime()) / 1000
+
+  let seconds = Math.floor(deltaTimeSeconds % 60);
+  let secondsAsString = seconds < 10 ? "0" + seconds : seconds;
+
+  timeDiff = Math.floor(deltaTimeSeconds / 60);
+  let minutes = timeDiff % 60;
+  let minutesAsString = minutes < 10 ? "0" + minutes : minutes;
+  return minutesAsString + ":" + secondsAsString;
+
+}
+
 function drawStats() {
   textSize(20);
   fill(156, 256, 156)
   textAlign(LEFT);
-  text('time: 123:456', 0, (3 + maxHeight) * gridSize);
+  text('timer: ' + getTimeElapsed(), 0, (3 + maxHeight) * gridSize);
   textAlign(RIGHT);
-  text('speed: 12345', gridSize * maxWidth, (3 + maxHeight) * gridSize);
+  text('speed: ' + speed, gridSize * maxWidth, (3 + maxHeight) * gridSize);
   textAlign(CENTER);
-  text('length: 123:456', gridSize * maxWidth * 0.5, (3 + maxHeight) * gridSize);
+  text('length: ' + snakeBody.length, gridSize * maxWidth * 0.5, (3 + maxHeight) * gridSize);
 
 }
 
