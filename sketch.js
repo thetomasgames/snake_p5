@@ -12,11 +12,14 @@ let startTimestamp;
 let speed;
 let applePosition;
 
+let keyPressedQueue;
+
 function setup() {
   startTimestamp = new Date()
   snakeBody = []
   playing = true
   lastMovementDirection = snakeDirection = directions.right;
+  keyPressedQueue = []
   adjustSpeed()
   randomizeApplePosition()
   for (let i = 0; i < startSnakeSize; i++) {
@@ -44,6 +47,14 @@ function draw() {
 }
 
 function moveSnake() {
+  while (keyPressedQueue.length > 0) {
+    let newDirection = keyPressedQueue.shift()
+    if (newDirection != snakeDirection && newDirection != oppositeDirection(snakeDirection)) {
+      snakeDirection = newDirection;
+      break;
+    }
+  }
+
   deltaX = 0
   deltaY = 0
   switch (snakeDirection) {
@@ -73,24 +84,16 @@ function moveSnake() {
 function keyPressed() {
   switch (keyCode) {
     case LEFT_ARROW:
-      if (lastMovementDirection != directions.right) {
-        snakeDirection = directions.left
-      }
+      keyPressedQueue.push(directions.left)
       break
     case RIGHT_ARROW:
-      if (lastMovementDirection != directions.left) {
-        snakeDirection = directions.right
-      }
+      keyPressedQueue.push(directions.right)
       break
     case UP_ARROW:
-      if (lastMovementDirection != directions.down) {
-        snakeDirection = directions.up
-      }
+      keyPressedQueue.push(directions.up)
       break
     case DOWN_ARROW:
-      if (lastMovementDirection != directions.up) {
-        snakeDirection = directions.down
-      }
+      keyPressedQueue.push(directions.down)
       break
   }
 }
@@ -210,7 +213,7 @@ function randomizeApplePosition() {
 function drawApple() {
   fill(163, 32, 58)
   stroke(163, 32, 58)
-  circle((applePosition[0] + 0.5) * gridSize, (applePosition[1] + 0.5) * gridSize, gridSize, gridSize)
+  circle((applePosition[0] + 0.5) * gridSize, (applePosition[1] + 0.5) * gridSize, gridSize)
 }
 
 function adjustSpeed() {
@@ -224,5 +227,18 @@ function adjustSpeed() {
     speed = 25
   } else if (snakeLength <= 20) {
     speed = 30
+  }
+}
+
+function oppositeDirection(direction) {
+  switch (direction) {
+    case directions.left:
+      return directions.right;
+    case directions.right:
+      return directions.left;
+    case directions.up:
+      return directions.down;
+    case directions.down:
+      return directions.up;
   }
 }
