@@ -14,12 +14,12 @@ function setup() {
   for (let i = 0; i < 10; i++) {
     snakeBody.unshift([i, 1]);
   }
-  createCanvas(maxWidth * gridSize, maxHeight * gridSize);
+  createCanvas((1 + maxWidth) * gridSize, (1 + maxHeight) * gridSize);
   frameRate(15); // Attempt to refresh at starting FPS
 }
 
 function draw() {
-  background(156);
+  drawScenario()
   if (playing) {
     moveSnake()
     drawSnake()
@@ -83,6 +83,7 @@ function keyPressed() {
 }
 
 function drawSnake() {
+  fill(0, 255, 0)
   for (bodyPart of snakeBody) {
     rect(bodyPart[0] * gridSize, bodyPart[1] * gridSize, gridSize, gridSize)
   }
@@ -107,4 +108,19 @@ function hasCollidedWithBody() {
   partsOnHead = snakeBody.filter(bodyPart => bodyPart[0] == snakeHead[0] && bodyPart[1] == snakeHead[1]).length
 
   return partsOnHead > 1
+}
+
+function drawScenario() {
+  background(0);
+  fill(156, 156, 156)
+  stroke(0)
+
+  for (let i = 0; i <= maxWidth; i++) {
+    rect(gridSize * i, 0, gridSize, gridSize);
+    rect(gridSize * i, gridSize * maxHeight, gridSize, gridSize);
+  }
+  for (let i = 0; i <= maxHeight; i++) {
+    rect(0, gridSize * i, gridSize, gridSize);
+    rect(gridSize * maxWidth, gridSize * i, gridSize, gridSize);
+  }
 }
