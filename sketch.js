@@ -2,6 +2,7 @@ const directions = Object.freeze({ "left": 1, "right": 2, "up": 3, "down": 4 })
 const gridSize = 10
 const maxWidth = 80
 const maxHeight = 50
+const startSnakeSize = 3
 
 let snakeBody;
 let playing;
@@ -16,9 +17,9 @@ function setup() {
   snakeBody = []
   playing = true
   lastMovementDirection = snakeDirection = directions.right;
-  speed = 15;
+  adjustSpeed()
   randomizeApplePosition()
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < startSnakeSize; i++) {
     snakeBody.unshift([i, 1]);
   }
   createCanvas((1 + maxWidth) * gridSize, (4 + maxHeight) * gridSize);
@@ -38,6 +39,7 @@ function draw() {
       growSnake()
       randomizeApplePosition()
     }
+    adjustSpeed()
   }
 }
 
@@ -207,4 +209,18 @@ function drawApple() {
   fill(163, 32, 58)
   stroke(163, 32, 58)
   circle((applePosition[0] + 0.5) * gridSize, (applePosition[1] + 0.5) * gridSize, gridSize, gridSize)
+}
+
+function adjustSpeed() {
+  snakeLength = snakeBody.length
+
+  if (snakeLength <= 5) {
+    speed = 15
+  } else if (snakeLength <= 10) {
+    speed = 20
+  } else if (snakeLength <= 15) {
+    speed = 25
+  } else if (snakeLength <= 20) {
+    speed = 30
+  }
 }
