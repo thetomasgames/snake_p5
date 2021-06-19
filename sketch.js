@@ -85,15 +85,19 @@ function moveSnake() {
 function keyPressed() {
   switch (keyCode) {
     case LEFT_ARROW:
+    case 65:
       keyPressedQueue.push(directions.left)
       break
     case RIGHT_ARROW:
+    case 68:
       keyPressedQueue.push(directions.right)
       break
     case UP_ARROW:
+    case 87:
       keyPressedQueue.push(directions.up)
       break
     case DOWN_ARROW:
+    case 83:
       keyPressedQueue.push(directions.down)
       break
   }
