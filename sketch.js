@@ -97,8 +97,10 @@ function keyPressed() {
 
 function drawSnake() {
   fill(0, 255, 0)
+  stroke(200, 255, 0)
   for (bodyPart of snakeBody) {
     rect(bodyPart[0] * gridSize, bodyPart[1] * gridSize, gridSize, gridSize)
+    stroke(0, 0, 0)
   }
 }
 
@@ -188,8 +190,8 @@ function growSnake() {
 }
 
 function randomPosition(maxX, maxY) {
-  randX = Math.floor(Math.random() * maxX)
-  randY = Math.floor(Math.random() * maxY)
+  randX = Math.floor(Math.random() * maxX) + 1
+  randY = Math.floor(Math.random() * maxY) + 1
 
   return [randX, randY]
 }
@@ -198,7 +200,7 @@ function randomizeApplePosition() {
   tries = 0
   maxTries = 10000;
   while (tries < maxTries) {
-    applePosition = randomPosition(maxWidth, maxHeight)
+    applePosition = randomPosition(maxWidth - 2, maxHeight - 2)
     if (snakeBody.filter(bodyPart => bodyPart[0] == applePosition[1] && bodyPart[1] == applePosition[1]).length == 0) {
       break;
     }
