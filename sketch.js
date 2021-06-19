@@ -14,12 +14,13 @@ function setup() {
   for (let i = 0; i < 10; i++) {
     snakeBody.unshift([i, 1]);
   }
-  createCanvas((1 + maxWidth) * gridSize, (1 + maxHeight) * gridSize);
+  createCanvas((1 + maxWidth) * gridSize, (4 + maxHeight) * gridSize);
   frameRate(15); // Attempt to refresh at starting FPS
 }
 
 function draw() {
   drawScenario()
+  drawStats()
   if (playing) {
     moveSnake()
     drawSnake()
@@ -123,4 +124,16 @@ function drawScenario() {
     rect(0, gridSize * i, gridSize, gridSize);
     rect(gridSize * maxWidth, gridSize * i, gridSize, gridSize);
   }
+}
+
+function drawStats() {
+  textSize(20);
+  fill(156, 256, 156)
+  textAlign(LEFT);
+  text('time: 123:456', 0, (3 + maxHeight) * gridSize);
+  textAlign(RIGHT);
+  text('speed: 12345', gridSize * maxWidth, (3 + maxHeight) * gridSize);
+  textAlign(CENTER);
+  text('length: 123:456', gridSize * maxWidth * 0.5, (3 + maxHeight) * gridSize);
+
 }
