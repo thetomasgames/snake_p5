@@ -35,8 +35,8 @@ function draw() {
     drawScenario()
     drawStats()
     moveSnake()
-    drawSnake()
     drawApple()
+    drawSnake()
     if (hasCollidedWithWall() || hasCollidedWithBody()) {
       gameOver()
     } else if (hasCaughtApple()) {
